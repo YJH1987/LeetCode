@@ -1,3 +1,16 @@
+/*Given a binary tree, return the inorder traversal of its nodes' values.
+
+For example:
+Given binary tree [1,null,2,3],
+   1
+    \
+     2
+    /
+   3
+return [1,3,2].
+
+Note: Recursive solution is trivial, could you do it iteratively?*/
+
 /**
  * Definition for binary tree
  * public class TreeNode {
@@ -7,29 +20,14 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-import java.util.*;
 
 public class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
-        /*
-            stack s
-            list l
-            current=root
-            while s not empty or current not null:
-                if current not null:
-                    s.push current
-                    current=current.left
-                else:
-                    current=s.pop
-                    l.add current.val
-                    current=current.right
-            return l
-        */
-        ArrayDeque<TreeNode> stack = new ArrayDeque<TreeNode>();
+        Stack<TreeNode> stack = new Stack<TreeNode>();
         List<Integer> list = new ArrayList<Integer>();
         TreeNode current = root;
-        while(!stack.isEmpty() || current!=null) {
-            if(current!=null) {
+        while (!stack.isEmpty() || current != null) {
+            if (current != null) {
                 stack.push(current);
                 current = current.left;
             } else {
