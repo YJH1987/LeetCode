@@ -1,3 +1,19 @@
+/*Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]*/
+
 /**
  * Definition for binary tree
  * public class TreeNode {
@@ -7,30 +23,27 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-import java.util.*;
 
 public class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> r = new ArrayList<List<Integer>>();
-        ArrayDeque<TreeNode> q = new ArrayDeque<TreeNode>();
-        if(root==null) return r;
-        q.offer(root);
-        boolean reversedOrder = false;
-        while(!q.isEmpty()) {
-            int len = q.size();
-            List<Integer> level = new LinkedList<Integer>();
-            for(int i=0;i<len;i++){
-                TreeNode n = q.poll();
-                if(reversedOrder)
-                    level.add(0, n.val);
-                else
-                    level.add(n.val);
-                if(n.left!=null) q.offer(n.left);
-                if(n.right!=null) q.offer(n.right);
-            }
-            r.add(level);
-            reversedOrder = !reversedOrder;
+        List<List<Integer>> sol = new ArrayList<>();
+        travel(root, sol, 0);
+        return sol;
+    }
+
+    private void travel(TreeNode curr, List<List<Integer>> sol, int level) {
+        if (curr == null) return;
+
+        if (sol.size() <= level) {
+            List<Integer> newLevel = new LinkedList<>();
+            sol.add(newLevel);
         }
-        return r;
+
+        List<Integer> collection = sol.get(level);
+        if (level % 2 == 0) collection.add(curr.val);
+        else collection.add(0, curr.val);
+
+        travel(curr.left, sol, level + 1);
+        travel(curr.right, sol, level + 1);
     }
 }
