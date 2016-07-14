@@ -1,3 +1,15 @@
+/*Given a binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path does not need to go through the root.
+
+For example:
+Given the below binary tree,
+
+       1
+      / \
+     2   3
+Return 6.*/
+
 /**
  * Definition for binary tree
  * public class TreeNode {
@@ -7,79 +19,21 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-import java.util.*;
-public class Solution {
-    public int maxPathSum(TreeNode root) {
-        Map<TreeNode,Integer> d = new HashMap<TreeNode,Integer>();
-        f(root,d);
-        return g(root,d);
-    }
-    private int g(TreeNode root, Map<TreeNode,Integer> d) {
-        if(root==null) return 0x80000000;
-        int l = g(root.left, d);
-        int r = g(root.right, d);
-        int res = Math.max(l, r);
-        res = Math.max(res, root.val);
-        if(root.left != null) res = Math.max(res, d.get(root.left) +root.val);
-        if(root.right!= null) res = Math.max(res, d.get(root.right)+root.val);
-        if(root.left!=null && root.right!=null) res = Math.max(res,d.get(root.left) + d.get(root.right)+root.val);
-        return res;
-    }
-    private int f(TreeNode root, Map<TreeNode,Integer> d) {
-        if(root==null) return 0x80000000;
-        if(d.containsKey(root)) return d.get(root);
-        d.put(root, Math.max(0, Math.max(f(root.left, d), f(root.right, d))) + root.val);
-        return d.get(root);
-    }
-}
-/*
-class Solution:
-    # @param root, a tree node
-    # @return an integer
-    def maxPathSum(self, root):
-        d={}
-        self.f(root, d)
-        return self.g(root, d)
-    
-    def g(self, root, d):
-        if not root:
-            return 0
-        l = self.g(root.left, d)
-        r = self.g(root.right,d)
-        res = max(l, r, root.val)
-        if root.left:
-            res = max(res, d[root.left]+root.val)
-        if root.right:
-            res = max(res, d[root.right]+root.val)
-        if root.left and root.right:
-            res = max(res, d[root.left]+d[root.right]+root.val)
-        return res
-    
-    def f(self, root, d):
-        if not root:
-            return -0xdeadbeaf
-        if root in d:
-            return d[root]
-        d[root] = max(0, self.f(root.left,d), self.f(root.right,d)) + root.val
-        return d[root]
-*/
 
-// Solution 2
 public class Solution {
-    private int maxSum;
+    int maxValue;
     
     public int maxPathSum(TreeNode root) {
-        maxSum = Integer.MIN_VALUE;
-        findMax(root);
-        return maxSum;
+        maxValue = Integer.MIN_VALUE;
+        maxPathDown(root);
+        return maxValue;
     }
     
-    private int findMax(TreeNode p) {
-        if (p == null) return 0;
-        int left = findMax(p.left);
-        int right = findMax(p.right);
-        maxSum = Math.max(p.val + left + right, maxSum);
-        int res = p.val + Math.max(left, right);
-        return res > 0 ? res : 0;
+    private int maxPathDown(TreeNode node) {
+        if (node == null) return 0;
+        int left = Math.max(0, maxPathDown(node.left));
+        int right = Math.max(0, maxPathDown(node.right));
+        maxValue = Math.max(maxValue, left + right + node.val);
+        return Math.max(left, right) + node.val;
     }
 }
