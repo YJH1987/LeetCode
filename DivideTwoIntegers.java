@@ -1,40 +1,33 @@
 public class Solution {
     public int divide(int dividend, int divisor) {
-        /*
-            if dr==0:
-                throw new IllegalArgumentException();
-            sign = (dd>0 && dr<0 || dd<0 && dr>0)? -1:1
-            dd = Math.abs(dd)
-            dr = Math.abs(dr)
-            
-            r=0
-            while dd>=dr:
-                bp=1
-                tmp=dr
-                while (tmp<<1)>0 && dd>(tmp<<1):
-                    tmp<<=1
-                    bp<<=1
-                dd-=tmp
-                r+=bp
-                
-            return r*sign
-        */
-        if(divisor==0) throw new IllegalArgumentException();
-        int sign = ((dividend>0 && divisor<0) || (dividend<0 && divisor>0))? -1:1;
-        long dd = Math.abs((long)dividend);
-        long dr = Math.abs((long)divisor);
-        
-        long r = 0;
-        while (dd>=dr) {
-            long bp = 1;
-            long tmp = dr;
-            while((tmp<<1)>0 && dd>(tmp<<1)) {
-                tmp <<= 1;
-                bp<<=1;
-            }
-            dd-=tmp;
-            r+=bp;
-        }
-        return (int)(r*sign);
+        long result = divideLong(dividend, divisor);
+        return result > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) result;
     }
-} 
+
+    // It's easy to handle edge cases when
+    // operate with long numbers rather than int
+    public long divideLong(long dividend, long divisor) {
+
+        // Remember the sign
+        boolean negative = dividend < 0 != divisor < 0;
+
+        // Make dividend and divisor unsign
+        if (dividend < 0) dividend = -dividend;
+        if (divisor < 0) divisor = -divisor;
+
+        // Return if nothing to divide
+        if (dividend < divisor) return 0;
+
+        // Sum divisor 2, 4, 8, 16, 32 .... times
+        long sum = divisor;
+        long divide = 1;
+        while ((sum + sum) <= dividend) {
+            sum += sum;
+            divide += divide;
+        }
+
+        // Make a recursive call for (devided-sum) and add it to the result
+        return negative ? -(divide + divideLong((dividend - sum), divisor)) :
+            (divide + divideLong((dividend - sum), divisor));
+    }
+}
