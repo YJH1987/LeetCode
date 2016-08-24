@@ -12,11 +12,9 @@ For example:
 
 public class Solution {
     public int titleToNumber(String s) {
-        int len = s.length();
-        int result = s.charAt(0) - 'A' + 1;
-        for (int i = 1; i < len; i++) {
-            int temp = s.charAt(i) - 'A' + 1;
-            result =  temp + result * 26;
+        int result = 0;
+        for (int i = 0; i < s.length(); i++) {
+            result = result * 26 + (s.charAt(i) - 'A' + 1);
         }
         return result;
     }
