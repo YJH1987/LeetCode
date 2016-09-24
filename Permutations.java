@@ -1,41 +1,31 @@
-import java.util.*;
+/*Given a collection of distinct numbers, return all possible permutations.
+
+For example,
+[1,2,3] have the following permutations:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]*/
 
 public class Solution {
-    public List<List<Integer>> permute(int[] num) {
-        /*
-            if len(num)<=1:
-                return [num]
-            result = []
-            for n in set(num):
-                num1 = [i for i in num]
-                num1.remove(n)
-                for r in self.permute(num1):
-                    r.append(n)
-                    result.append(r)
-            return result
-        */
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if(num.length==0) return result;
-        List<Integer> l = new ArrayList<Integer>();
-        if(num.length==1) {
-            l.add(num[0]);
-            result.add(l);
-            return result;
-        }
-        Arrays.sort(num);
-        for(int i=0; i<num.length; i++) {
-            if(i==0 || num[i]!=num[i-1]) {
-                int[] num1 = new int[num.length-1];
-                for(int j=0; j<num.length; j++) {
-                    if(j<i) num1[j]=num[j];
-                    if(j>i) num1[j-1]=num[j];
-                }
-                for(List<Integer> r : permute(num1)) {
-                    r.add(num[i]);
-                    result.add(r);
+    public List<List<Integer >> permute(int[] num) {
+        LinkedList<List<Integer>> res = new LinkedList<List<Integer>> ();
+        res.add(new ArrayList<Integer>());
+        for (int n: num) {
+            int size = res.size();
+            for (; size > 0; size--) {
+                List<Integer> r = res.pollFirst();
+                for (int i = 0; i <= r.size(); i++) {
+                    List<Integer> t = new ArrayList<Integer>(r);
+                    t.add(i, n);
+                    res.add(t);
                 }
             }
         }
-        return result;
+        return res;
     }
 }

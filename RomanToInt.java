@@ -13,8 +13,7 @@ public class RomanToInt {
 		s = s.toUpperCase();
 		if(s.length() == 0) return 0;
 		
-		for(int i = 0; i < symbol.length; i++)
-		{
+		for(int i = 0; i < symbol.length; i++) {
 			int pos = s.indexOf(symbol[i]) ;
 			
 			if(pos >= 0)

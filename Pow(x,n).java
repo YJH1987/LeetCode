@@ -1,3 +1,5 @@
+/*Implement pow(x, n).*/
+
 public class Solution {
     public double pow(double x, int n) {
         if (n == 0x80000000) return pow(x, n / 2) * pow(x, n / 2);

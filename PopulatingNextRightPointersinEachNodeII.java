@@ -1,3 +1,24 @@
+/*Follow up for problem "Populating Next Right Pointers in Each Node".
+
+What if the given tree could be any binary tree? Would your previous solution still work?
+
+Note:
+
+You may only use constant extra space.
+For example,
+Given the following binary tree,
+         1
+       /  \
+      2    3
+     / \    \
+    4   5    7
+After calling your function, the tree should look like:
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \    \
+    4-> 5 -> 7 -> NULL*/
+
 /**
  * Definition for binary tree with next pointer.
  * public class TreeLinkNode {
@@ -6,64 +27,42 @@
  *     TreeLinkNode(int x) { val = x; }
  * }
  */
+
 public class Solution {
+    //based on level order traversal
     public void connect(TreeLinkNode root) {
-        /*
-            def connect(self, root):
-                cur,head,prev=root,None,None
-                while cur:
-                    while cur:
-                        if cur.left:
-                            if prev:
-                                prev.next=cur.left
-                            else:
-                                head=cur.left
-                            prev=cur.left
-                        if cur.right:
-                            if prev:
-                                prev.next=cur.right
-                            else:
-                                head=cur.right
-                            prev=cur.right
-                        cur=cur.next
-                    cur=head
-                    head,prev=None,None
-            '''
-            def connect(self, root):
-                if not root:
-                    return
-                q=[root]
-                while q:
-                    size=len(q)
-                    prev=None
-                    for n in q[:size]:
-                        if n.left:
-                            q.append(n.left)
-                        if n.right:
-                            q.append(n.right)
-                        if prev:
-                            prev.next=n
-                        prev=n
-                    q=q[size:]'''
-        */
-        TreeLinkNode cur=root, head=null, prev=null;
-        while(cur!=null) {
-            while(cur!=null) {
-                if(cur.left!=null) {
-                    if(prev!=null) prev.next = cur.left;
-                    else head = cur.left;
-                    prev=cur.left;
+        TreeLinkNode head = null; //head of the next level
+        TreeLinkNode prev = null; //the leading node on the next level
+        TreeLinkNode cur = root; //current node of current level
+
+        while (cur != null) {
+            while (cur != null) { //iterate on the current level
+                //left child
+                if (cur.left != null) {
+                    if (prev != null) {
+                        prev.next = cur.left;
+                    } else {
+                        head = cur.left;
+                    }
+                    prev = cur.left;
                 }
-                if(cur.right!=null) {
-                    if(prev!=null) prev.next = cur.right;
-                    else head = cur.right;
-                    prev=cur.right;
+                //right child
+                if (cur.right != null) {
+                    if (prev != null) {
+                        prev.next = cur.right;
+                    } else {
+                        head = cur.right;
+                    }
+                    prev = cur.right;
                 }
-                cur=cur.next;
+                //move to next node
+                cur = cur.next;
             }
-            cur=head;
-            head=null;
-            prev=null;
+
+            //move to next level
+            cur = head;
+            head = null;
+            prev = null;
         }
     }
 }

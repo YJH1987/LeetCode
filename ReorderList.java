@@ -1,3 +1,11 @@
+/*Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+You must do this in-place without altering the nodes' values.
+
+For example,
+Given {1,2,3,4}, reorder it to {1,4,2,3}.*/
+
 /**
  * Definition for singly-linked list.
  * class ListNode {
@@ -9,92 +17,38 @@
  *     }
  * }
  */
+
 public class Solution {
     public void reorderList(ListNode head) {
-        /*
-            '''test
-                0
-                1
-                2 s=1
-                3 s=2
-                4 s=2
-                5 s=3
-            '''
-            if head==null || head.next==null:
-                return
-            s,f=head,head.next
-            while f!=null and f.next!=null:
-                s=s.next
-                f=f.next.next
-            dm1.next=head
-            tmp=s
-            s=s.next
-            tmp.next=null
-            dm2
-            while s!=null:
-                node=s
-                s=s.next
-                node.next=null
-                oldNext=dm2.next
-                dm2.next=node
-                node.next=oldNext
-            c1=dm1.next
-            c2=dm2.next
-            dm
-            c=dm
-            while c1!=null and c2!=null:
-                n1=c1
-                c1=c1.next
-                n1.next=null
-                c.next=n1
-                c=c.next
-                n2=c2
-                c2=c2.next
-                n2.next=null
-                c.next=n2
-                c=c.next
-            if c1!=null:
-                c.next=c1
-            if c2!=null:
-                c.next=c2
-        */
-        if(head==null || head.next==null) return;
-        ListNode s=head, f=head.next;
-        while(f!=null && f.next!=null) {
-            s=s.next;
-            f=f.next.next;
+        if (head == null || head.next == null) return;
+
+        //Find the middle of the list
+        ListNode p1 = head;
+        ListNode p2 = head;
+        while (p2.next != null && p2.next.next != null) {
+            p1 = p1.next;
+            p2 = p2.next.next;
         }
-        ListNode dm1 = new ListNode(-1);
-        dm1.next = head;
-        ListNode tmp = s;
-        s = s.next;
-        tmp.next = null;
-        ListNode dm2 = new ListNode(-1);
-        while (s!=null) {
-            ListNode node = s;
-            s = s.next;
-            node.next = null;
-            ListNode oldNext = dm2.next;
-            dm2.next = node;
-            node.next = oldNext;
+
+        //Reverse the half after middle  1->2->3->4->5->6 to 1->2->3->6->5->4
+        ListNode preMiddle = p1;
+        ListNode preCurrent = p1.next;
+        while (preCurrent.next != null) {
+            ListNode current = preCurrent.next;
+            preCurrent.next = current.next;
+            current.next = preMiddle.next;
+            preMiddle.next = current;
         }
-        ListNode c1 = dm1.next;
-        ListNode c2 = dm2.next;
-        ListNode dm = new ListNode(-1);
-        ListNode c = dm;
-        while (c1!=null && c2!=null) {
-            ListNode n1 = c1;
-            c1 = c1.next;
-            n1.next = null;
-            c.next = n1;
-            c = c.next;
-            ListNode n2 = c2;
-            c2 = c2.next;
-            n2.next = null;
-            c.next = n2;
-            c = c.next;
+
+        //Start reorder one by one  1->2->3->6->5->4 to 1->6->2->5->3->4
+        p1 = head;
+        p2 = preMiddle.next;
+        while (p1 != preMiddle) {
+            preMiddle.next = p2.next;
+            p2.next = p1.next;
+            p1.next = p2;
+            p1 = p2.next;
+            p2 = preMiddle.next;
         }
-        if(c1 != null) c.next = c1;
-        if(c2 != null) c.next = c2;
     }
 }

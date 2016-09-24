@@ -44,8 +44,8 @@ public class Solution {
         StringBuilder res = new StringBuilder();  
         int i = 0;  
         while (num > 0) {  
-            int times = num/nums[i];  
-                num = num%nums[i];  
+            int times = num / nums[i];  
+            num = num % nums[i];  
             for (; times > 0; times--) {  
                 res.append(symbols[i]);  
             }  

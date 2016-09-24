@@ -1,3 +1,4 @@
+// Solution 1:
 public class Solution {
     public String convert(String s, int nRows) {
         /*
@@ -29,5 +30,34 @@ public class Solution {
         }
         for(int i = nRows-1; i<s.length(); i+=2*nRows-2) r.append(s.charAt(i));
         return r.toString();
+    }
+}
+
+// Solution 2:
+public class Solution {
+    public String convert(String s, int numRows) {
+        ArrayList<Character>[] rows = (ArrayList<Character>[]) new ArrayList[numRows];
+        for (int i = 0; i < numRows; i++) {
+            rows[i] = new ArrayList<Character>();
+        }
+        
+        int n = s.length();
+        for (int i = 0; i < n; ) {
+            for (int j = 0; j < numRows && i < n; j++, i++) {
+                rows[j].add(s.charAt(i));
+            }
+            
+            for (int j = numRows - 2; j > 0 && i < n; j--, i++) {
+                rows[j].add(s.charAt(i));
+            }
+        }
+        
+        StringBuilder sb = new StringBuilder(n);
+        for (int row = 0; row < numRows; row++) {
+            for (int j = 0, rowLen = rows[row].size(); j < rowLen; j++) {
+                sb.append(rows[row].get(j));
+            }
+        }
+        return sb.toString();
     }
 }
