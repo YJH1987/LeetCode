@@ -1,45 +1,42 @@
+/* Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+The replacement must be in-place, do not allocate extra memory.
+
+Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1*/
+
 public class Solution {
-    public void nextPermutation(int[] num) {
-        /*
-            def nextPermutation(self, num):
-                for i in range(len(num)-1,0,-1):
-                    if num[i]>num[i-1]:
-                        for j in range(len(num)-1,i-1,-1):
-                            if num[j]>num[i-1]:
-                                num[i-1],num[j]=num[j],num[i-1]
-                                break
-                        k=0
-                        while i+k<len(num)-1-k:
-                            num[i+k],num[len(num)-1-k]=num[len(num)-1-k],num[i+k]
-                            k+=1
-                        return num
-                num.sort()
-                return num
-        */
-        for(int i=num.length-1; i>0; i--) {
-            if(num[i]>num[i-1]) {
-                for(int j=num.length-1; j>=i; j--) {
-                    if(num[j]>num[i-1]) {
-                        int t = num[j];
-                        num[j]= num[i-1];
-                        num[i-1]= t;
-                        break;
-                    }
-                }
-                int k=0;
-                while(i+k<num.length-1-k) {
-                    int t = num[i+k];
-                    num[i+k] = num[num.length-1-k];
-                    num[num.length-1-k] = t;
-                    k++;
-                }
-                return;
+    public void nextPermutation(int[] nums) {
+        int i = nums.length - 2;
+        while (i >= 0 && nums[i + 1] <= nums[i]) {
+            i--;
+        }
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j >= 0 && nums[j] <= nums[i]) {
+                j--;
             }
+            swap(nums, i, j);
         }
-        for(int i=0; i<num.length/2; i++) {
-            int t = num[i];
-            num[i]=num[num.length-i-1];
-            num[num.length-i-1] = t;
+        reverse(nums, i + 1);
+    }
+
+    private void reverse(int[] nums, int start) {
+        int i = start, j = nums.length - 1;
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
         }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }

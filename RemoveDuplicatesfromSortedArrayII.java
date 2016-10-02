@@ -1,24 +1,17 @@
+/*Follow up for "Remove Duplicates":
+What if duplicates are allowed at most twice?
+
+For example,
+Given sorted array nums = [1,1,1,2,2,3],
+
+Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3. It doesn't matter what you leave beyond the new length.*/
+
 public class Solution {
-    public int removeDuplicates(int[] A) {
-        if(A==null) return -1;
-        
-        if(A.length==0) return 0;
-        int r = 1;
-        int c = 1;
-        boolean twice=false;
-        for(int i=1; i<A.length; i++) {
-            if(A[i]==A[i-1]) {
-                if(!twice) {
-                    r++;
-                    twice=true;
-                    A[c++]=A[i];
-                }
-            } else {
-                r++;
-                twice=false;
-                A[c++]=A[i];
-            }
-        }
-        return r;
+    public int removeDuplicates(int[] nums) {
+        int i = 0;
+        for (int n: nums)
+            if (i < 2 || n > nums[i - 2])
+                nums[i++] = n;
+        return i;
     }
 }
