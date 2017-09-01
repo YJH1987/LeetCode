@@ -16,10 +16,10 @@ public class Solution {
         List<Interval> ret = new ArrayList<>();
         Interval prev = null;
         for (Interval inter : intervals) {
-            if (  prev==null || inter.start>prev.end ) {
+            if (prev == null || inter.start > prev.end) {
                 ret.add(inter);
                 prev = inter;
-            } else if (inter.end>prev.end) {
+            } else if (inter.end > prev.end) {
                 // Modify the element already in list
                 prev.end = inter.end;
             }

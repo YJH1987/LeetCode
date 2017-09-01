@@ -37,22 +37,16 @@ After calling your function, the tree should look like:
  * }
  */
 
-public class Solution {
-    public void connect(TreeLinkNode root) {
-        if (root == null) return;
-        TreeLinkNode left = root.left, right = root.right;
-        connect(left);
-        connect(right);
-        while (left != null) {
-            left.next = right;
-            left = left.right;
-            right = right.left;
-        }
-    }
-}
-
--------------------------------------------------------------
-
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+ 
+// Solution 1
 public class Solution {
     public void connect(TreeLinkNode root) {
         TreeLinkNode level_start = root;
@@ -65,6 +59,21 @@ public class Solution {
                 cur = cur.next;
             }
             level_start = level_start.left;
+        }
+    }
+}
+
+// Solution 2
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null) return;
+        TreeLinkNode left = root.left, right = root.right;
+        connect(left);
+        connect(right);
+        while (left != null) {
+            left.next = right;
+            left = left.right;
+            right = right.left;
         }
     }
 }

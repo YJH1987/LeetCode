@@ -24,8 +24,11 @@ public class Solution {
                         while (lo < hi && num[hi] == num[hi - 1]) hi--;
                         lo++;
                         hi--;
-                    } else if (num[lo] + num[hi] < sum) lo++;
-                    else hi--;
+                    } else if (num[lo] + num[hi] < sum) {
+                        lo++;
+                    } else {
+                        hi--;
+                    }
                 }
             }
         }

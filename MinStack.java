@@ -26,38 +26,31 @@ class MinStack {
 }
 
 // Solution 2
-import java.util.*;
-
 class MinStack {
-    public void push(int x) {
-        if(arr.size()==0) arr.add(new Elem(x, x));
-        else {
-            int min = Math.min(arr.get(arr.size()-1).min,x);
-            arr.add(new Elem(x, min));
+    static class Element {
+        final int value;
+        final int min;
+        Element(final int value, final int min) {
+            this.value = value;
+            this.min = min;
         }
+    }
+    final Stack<Element> stack = new Stack<>();
+
+    public void push(int x) {
+        final int min = (stack.empty()) ? x : Math.min(stack.peek().min, x);
+        stack.push(new Element(x, min));
     }
 
     public void pop() {
-        if(arr.size()==0) throw new java.util.EmptyStackException();
-        arr.remove(arr.size()-1);
+        stack.pop();
     }
 
     public int top() {
-        if(arr.size()==0) throw new java.util.EmptyStackException();
-        return arr.get(arr.size()-1).val;
+        return stack.peek().value;
     }
 
     public int getMin() {
-        if(arr.size()==0) throw new java.util.EmptyStackException();
-        return arr.get(arr.size()-1).min;
-    }
-    private ArrayList<Elem> arr = new ArrayList<Elem>();
-    private static class Elem {
-        int val;
-        int min;
-        Elem(int v, int m) {
-            val = v;
-            min = m;
-        }
+        return stack.peek().min;
     }
 }

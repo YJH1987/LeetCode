@@ -7,71 +7,117 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LRUCache {
-    private class DLNode {
-        int key, value;
-        DLNode prev, next;
 
-        DLNode(int k, int v) {
-            key = k;
-            value = v;
-        }
+    class DLinkedNode {
+        int key;
+        int value;
+        DLinkedNode pre;
+        DLinkedNode next;
     }
 
-    private Map<Integer, DLNode> cache;
-    private int capacity, size;
-    private DLNode dummyFirst, dummyLast;
+    /**
+     * Always add the new node right after head;
+     */
+    private void addNode(DLinkedNode node) {
+        node.pre = head;
+        node.next = head.next;
+
+        head.next.pre = node;
+        head.next = node;
+    }
+
+    /**
+     * Remove an existing node from the linked list.
+     */
+    private void removeNode(DLinkedNode node) {
+        DLinkedNode pre = node.pre;
+        DLinkedNode next = node.next;
+
+        pre.next = next;
+        next.pre = pre;
+    }
+
+    /**
+     * Move certain node in between to the head.
+     */
+    private void moveToHead(DLinkedNode node) {
+        this.removeNode(node);
+        this.addNode(node);
+    }
+
+    // pop the current tail. 
+    private DLinkedNode popTail() {
+        DLinkedNode res = tail.pre;
+        this.removeNode(res);
+        return res;
+    }
+
+    private HashMap<Integer, DLinkedNode>
+        cache = new HashMap<Integer, DLinkedNode>();
+    private int count;
+    private int capacity;
+    private DLinkedNode head, tail;
 
     public LRUCache(int capacity) {
+        this.count = 0;
         this.capacity = capacity;
-        cache = new HashMap<Integer, DLNode>();
-        size = 0;
-        dummyFirst = new DLNode(-1, -1);
-        dummyLast = new DLNode(-1, -1);
-        dummyFirst.next = dummyLast;
-        dummyLast.prev = dummyFirst;
+
+        head = new DLinkedNode();
+        head.pre = null;
+
+        tail = new DLinkedNode();
+        tail.next = null;
+
+        head.next = tail;
+        tail.pre = head;
     }
 
     public int get(int key) {
-        if (cache.containsKey(key)) {
-            int v = cache.get(key).value;
-            this.set(key, v);
-            return v;
-        } else return -1;
+
+        DLinkedNode node = cache.get(key);
+        if (node == null) {
+            return -1; // should raise exception here.
+        }
+
+        // move the accessed node to the head;
+        this.moveToHead(node);
+
+        return node.value;
     }
 
-    public void set(int key, int value) {
-        if (size == 0) {
-            DLNode node = new DLNode(key, value);
-            dummyFirst.next = node;
-            node.next = dummyLast;
-            dummyLast.prev = node;
-            node.prev = dummyFirst;
-            cache.put(key, node);
-            size++;
-        } else if (cache.containsKey(key)) {
-            DLNode node = cache.get(key);
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-            cache.remove(key);
-            size--;
-            this.set(key, value);
-        } else if (size >= capacity) {
-            DLNode node = dummyFirst.next;
-            dummyFirst.next = node.next;
-            node.next.prev = dummyFirst;
-            node.next = null;
-            node.prev = null;
-            cache.remove(node.key);
-            size--;
-            this.set(key, value);
+
+    public void put(int key, int value) {
+        DLinkedNode node = cache.get(key);
+
+        if (node == null) {
+
+            DLinkedNode newNode = new DLinkedNode();
+            newNode.key = key;
+            newNode.value = value;
+
+            this.cache.put(key, newNode);
+            this.addNode(newNode);
+
+            count++;
+
+            if (count > capacity) {
+                // pop the tail
+                DLinkedNode tail = this.popTail();
+                this.cache.remove(tail.key);
+                count--;
+            }
         } else {
-            DLNode node = new DLNode(key, value);
-            dummyLast.prev.next = node;
-            node.prev = dummyLast.prev;
-            node.next = dummyLast;
-            dummyLast.prev = node;
-            cache.put(key, node);
-            size++;
+            // update the value.
+            node.value = value;
+            this.moveToHead(node);
         }
+
     }
 }
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */

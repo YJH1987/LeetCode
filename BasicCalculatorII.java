@@ -1,4 +1,4 @@
-/* Implement a basic calculator to evaluate a simple expression string.
+/*Implement a basic calculator to evaluate a simple expression string.
 
 The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer division should truncate toward zero.
 
@@ -8,13 +8,12 @@ Some examples:
 "3+2*2" = 7
 " 3/2 " = 1
 " 3+5 / 2 " = 5
-Note: Do not use the eval built-in library function.
-*/
+Note: Do not use the eval built-in library function.*/
 
 public class Solution {
     public int calculate(String s) {
-        int len;
-        if (s == null || (len = s.length()) == 0) return 0;
+        int len = s.length();
+        if (s == null || (len == 0)) return 0;
         Stack<Integer> stack = new Stack<Integer>();
         int num = 0;
         char sign = '+';
@@ -27,7 +26,7 @@ public class Solution {
                     stack.push(-num);
                 }
                 if (sign == '+') {
-                    stack.push(num); 
+                    stack.push(num);
                 }
                 if (sign == '*') {
                     stack.push(stack.pop() * num);

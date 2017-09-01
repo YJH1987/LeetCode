@@ -1,3 +1,9 @@
+/*Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+For example,
+Given 1->2->3->3->4->4->5, return 1->2->5.
+Given 1->1->1->2->3, return 2->3.*/
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -11,52 +17,21 @@
  */
 public class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        /**
-         * if head==null || len == 1: return head
-         * dm->head
-         * c1 = dm, c2 = head, c3 = head
-         * while c3.next!=null:
-         *  c3 = c3.next
-         *  if c3.val==c2.val:
-         *      c2IsDup=true
-         *  else:
-         *      if c2IsDup:
-         *          c2IsDup=false
-         *      else:
-         *          c1.next=c2
-         *          c1=c1.next
-         *      c2=c3
-         * if !c2IsDup:
-         *  c1.next = c2
-         *  c1=c1.next
-         * c1.next=null
-         * return dm.next;
-         */
-         
-         if(head==null || head.next==null) return head;
-         ListNode dm = new ListNode(-1);
-         dm.next = head;
-         ListNode c1 = dm, c2 = head, c3 = head;
-         
-         boolean c2IsDup = false;
-         while(c3.next != null) {
-             c3 = c3.next;
-             if(c3.val == c2.val) {
-                 c2IsDup = true;
-             } else {
-                 if(c2IsDup) c2IsDup = false;
-                 else {
-                     c1.next = c2;
-                     c1 = c1.next;
-                 }
-                 c2 = c3;
-             }
-         }
-         if(!c2IsDup) {
-             c1.next = c2;
-             c1 = c1.next;
-         }
-         c1.next = null;
-         return dm.next;
+        ListNode prev = new ListNode(0);
+        prev.next = head;
+        head = prev;
+        ListNode p1 = head;
+        while(p1.next != null) {// p1 = null
+            ListNode p2 = p1.next;
+            while(p2.next != null && p2.val == p2.next.val) {
+                p2 = p2.next;
+            }
+            if(p1.next !=  p2) {
+                p1.next = p2.next;
+            } else {
+                p1 = p1.next;
+            }
+        }
+        return head.next;  
     }
 }

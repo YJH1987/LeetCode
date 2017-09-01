@@ -59,36 +59,35 @@ public class Solution {
 }
 
 // Solution 2
-import java.util.*;
 public class Solution {
     public int maxPoints(Point[] points) {
+        if (points.length <= 0) return 0;
         if (points.length <= 2) return points.length;
-        int m = 2;
+        int result = 0;
         for (int i = 0; i < points.length; i++) {
-            int cnt = 1;
-            ArrayList<Double> ratios = new ArrayList<Double>();
-            for (int j = i + 1; j < points.length; j++) {
-                if (points[i].x == points[j].x && points[i].y == points[j].y) cnt++;
-                else ratios.add(calcRatio(points[i], points[j]));
+            HashMap<Double, Integer> hm = new HashMap<Double, Integer>();
+            int samex = 1;
+            int samep = 0;
+            for (int j = 0; j < points.length; j++) {
+                if (j != i) {
+                    if ((points[j].x == points[i].x) && (points[j].y == points[i].y)) {
+                        samep++;
+                    }
+                    if (points[j].x == points[i].x) {
+                        samex++;
+                        continue;
+                    }
+                    double k = (double)(points[j].y - points[i].y) / (double)(points[j].x - points[i].x);
+                    if (hm.containsKey(k)) {
+                        hm.put(k, hm.get(k) + 1);
+                    } else {
+                        hm.put(k, 2);
+                    }
+                    result = Math.max(result, hm.get(k) + samep);
+                }
             }
-            m = Math.max(m, maxSimilar(ratios.toArray(new Double[ratios.size()])) + cnt);
+            result = Math.max(result, samex);
         }
-        return m;
-    }
-    private double calcRatio(Point a, Point b) {
-        if (a.x == b.x) return Math.atan(0x7fffffffffffffff L);
-        return Math.atan((a.y - b.y) * 1.0 / (a.x - b.x));
-    }
-    private int maxSimilar(Double[] rs) {
-        Arrays.sort(rs);
-        if (rs.length <= 1) return rs.length;
-        int m = 1, cur = 1;
-        for (int i = 1; i < rs.length; i++) {
-            if (Math.abs(rs[i] - rs[i - 1]) < 1e-7) {
-                cur++;
-                m = Math.max(m, cur);
-            } else cur = 1;
-        }
-        return m;
+        return result;
     }
 }

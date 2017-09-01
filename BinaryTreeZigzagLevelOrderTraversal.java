@@ -24,6 +24,38 @@ return its zigzag level order traversal as:
  * }
  */
 
+// Solution 1
+public class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        boolean order = true;
+        //int size = 1;
+
+        while(!q.isEmpty()) {
+            int size = q.size();
+            List<Integer> level = new ArrayList<>();
+            for(int i = 0; i < size; ++i) {
+                TreeNode n = q.poll();
+                if(order) {
+                    level.add(n.val);
+                } else {
+                    level.add(0, n.val);
+                }
+                if(n.left != null) q.add(n.left);
+                if(n.right != null) q.add(n.right);
+            }
+            res.add(level);
+            order = order ? false : true;
+        }
+        return res;
+    }
+}
+
+// Solution 2
 public class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> sol = new ArrayList<>();

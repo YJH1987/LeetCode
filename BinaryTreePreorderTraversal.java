@@ -19,6 +19,7 @@ return [1,2,3].*/
  * }
  */
 
+// Solution 1
 public class Solution {
     public List<Integer> preorderTraversal(TreeNode node) {
 	    List<Integer> list = new LinkedList<Integer>();
@@ -34,5 +35,24 @@ public class Solution {
 		    }
 	    }
         return list;
+    }
+}
+
+// Solution 2
+public class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode node = root;
+        while (node != null || !stack.isEmpty()) {
+            if (node != null) {
+                result.add(node.val);
+                stack.push(node.right);
+                node = node.left;
+            } else {
+                node = stack.pop();
+            }
+        }
+        return result;
     }
 }

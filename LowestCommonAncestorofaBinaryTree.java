@@ -20,6 +20,8 @@ For example, the lowest common ancestor (LCA) of nodes 5 and 1 is 3. Another exa
  *     TreeNode(int x) { val = x; }
  * }
  */
+
+// solution 1
 public class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null)
@@ -35,5 +37,35 @@ public class Solution {
             return root;
         
         return l != null ? l : r;
+    }
+}
+
+// solution 2
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Map<TreeNode, TreeNode> parent = new HashMap<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        parent.put(root, null);
+        stack.push(root);
+
+        while (!parent.containsKey(p) || !parent.containsKey(q)) {
+            TreeNode node = stack.pop();
+            if (node.left != null) {
+                parent.put(node.left, node);
+                stack.push(node.left);
+            }
+            if (node.right != null) {
+                parent.put(node.right, node);
+                stack.push(node.right);
+            }
+        }
+        Set<TreeNode> ancestors = new HashSet<>();
+        while (p != null) {
+            ancestors.add(p);
+            p = parent.get(p);
+        }
+        while (!ancestors.contains(q))
+            q = parent.get(q);
+        return q;
     }
 }

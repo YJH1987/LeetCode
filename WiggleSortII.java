@@ -10,17 +10,21 @@ You may assume all input has valid answer.
 Follow Up:
 Can you do it in O(n) time and/or in-place with O(1) extra space?*/
 
+// Solution 1
 public class Solution {
     public void wiggleSort(int[] nums) {
-        Arrays.sort(nums);
-        int n = nums.length, mid = n % 2 == 0 ? n / 2 - 1 : n / 2;
-        int[] temp = Arrays.copyOf(nums, n);
-        int index = 0;
-        for (int i = 0; i <= mid; i++) {
-            nums[index] = temp[mid - i];
-            if (index + 1 < n)
-                nums[index + 1] = temp[n - i - 1];
-            index += 2;
+        for (int i = 0; i < nums.length; i++) {
+            if (i % 2 == 1) {
+                if (nums[i] < nums[i - 1]) swap(nums, i);
+            } else if (i != 0 && nums[i] > nums[i - 1]) swap(nums, i);
         }
     }
+    
+    public void swap(int[] nums, int i) {
+        int tmp = nums[i];
+        nums[i] = nums[i - 1];
+        nums[i - 1] = tmp;
+    }
 }
+
+/*output the smallest result?*/

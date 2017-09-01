@@ -11,18 +11,18 @@ return [0, 1].*/
 import java.util.HashMap;
 
 public class Solution {
-    public int[] twoSum(int[] numbers, int target) {
-        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>(numbers.length);
-        for (int i = 0; i < numbers.length; i++) {
-            if (map.containsKey(target - numbers[i])) {
-                for (int j = 0; j < i; j++) {
-                    if (numbers[i] + numbers[j] == target) {
-                        return new int[]{j, i};
-                    }
-                }
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int[] result = new int[2];
+        for (int i = 0; i < nums.length; i++) {
+            int pair = target - nums[i];
+            if (map.containsKey(pair)) {
+                result[0] = map.get(pair);
+                result[1] = i;
+            } else {
+                map.put(nums[i], i);
             }
-            map.put(numbers[i], i);
         }
-        return new int[]{-1, -1};
+        return result;
     }
 }

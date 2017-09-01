@@ -10,46 +10,32 @@
  * }
  */
  
-import java.util.*;
-
 public class Solution {
-    public ListNode mergeKLists(List<ListNode> lists) {
-        /**
-         * O(klog(k)*n)
-         */
-         if(lists == null || lists.isEmpty()) return null;
-         ArrayDeque<ListNode> q = new ArrayDeque<ListNode>();
-         for(ListNode n : lists) {
-             if (n != null) q.offer(n);
-         }
-         while(q.size() > 1) {
-             ListNode a = q.poll();
-             ListNode b = q.poll();
-             q.offer(merge2Lists(a, b));
-         }
-         
-         return q.poll();
+    public static ListNode mergeKLists(ListNode[] lists) {
+        return partion(lists, 0, lists.length - 1);
     }
-    
-    private ListNode merge2Lists(ListNode a, ListNode b) {
-        ListNode dummy = new ListNode(-1);
-        ListNode cursor = dummy;
-        while(a!=null && b!=null) {
-            ListNode n = null;
-            if(a.val <= b.val) {
-                n = a;
-                a = a.next;
-            } else {
-                n = b;
-                b = b.next;
-            }
-            n.next = null;
-            cursor.next = n;
-            cursor = cursor.next;
+
+    public static ListNode partion(ListNode[] lists, int s, int e) {
+        if (s == e) return lists[s];
+        if (s < e) {
+            int q = (s + e) / 2;
+            ListNode l1 = partion(lists, s, q);
+            ListNode l2 = partion(lists, q + 1, e);
+            return merge(l1, l2);
+        } else
+            return null;
+    }
+
+    //This function is from Merge Two Sorted Lists.
+    public static ListNode merge(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        if (l1.val < l2.val) {
+            l1.next = merge(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = merge(l1, l2.next);
+            return l2;
         }
-        if(a != null) cursor.next = a;
-        if(b != null) cursor.next = b;
-        
-        return dummy.next;
     }
 }

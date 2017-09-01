@@ -6,6 +6,7 @@ dict = ["leet", "code"].
 
 Return true because "leetcode" can be segmented as "leet code".*/
 
+// solution 1
 import java.util.*;
 public class Solution {
     public boolean wordBreak(String s, Set<String> dict) {
@@ -23,5 +24,28 @@ public class Solution {
             dp[i] = found;
         }
         return dp[0];
+    }
+}
+
+// solution 2
+public class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        boolean[] f = new boolean[s.length() + 1];
+        f[0] = true;
+        
+        for (int i = 1; i <= s.length(); i++) {
+            for (String str : wordDict) {
+                if (str.length() <= i) {
+                    if (f[i - str.length()]) {
+                        if (s.substring(i - str.length(), i).equals(str)) {
+                            f[i] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return f[s.length()];
     }
 }

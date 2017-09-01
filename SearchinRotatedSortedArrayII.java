@@ -1,44 +1,44 @@
+/*Follow up for "Search in Rotated Sorted Array":
+What if duplicates are allowed?
+
+Would this affect the run-time complexity? How and why?
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+Write a function to determine if a given target is in the array.
+
+The array may contain duplicates.*/
+
 public class Solution {
-    public boolean search(int[] A, int target) {
-        return s0(A, 0, A.length, target);
-    }
-    private boolean s0(int[] A, int i, int j, int t) {
-        if(j<=i) return false;
-        if(j==i+1) return A[i]==t;
-        int mid = (i+j)/2;
-        /*
-            A[i] < A[mid]:
-                t<A[i] || A[mid]<t:
-                    return s0(A, mid+1,j,t)
-                t==A[i]:
-                    return true
-                A[i]<t<A[mid]:
-                    return s0(A, i, mid, t)
-                t==A[mid]:
-                    return true
-            A[i] == A[mid]:
-                if A[i]==t:
-                    return true
-                return s0(A,i+1,mid,t) || s0(A,mid+1,j,t)
-            A[i] > A[mid]:
-                t<A[mid] || A[i]<t:
-                    return s0(A, i, mid, t)
-                t==A[mid]:
-                    return true
-                A[mid]<t<A[i]:
-                    return s0(A, mid+1, j, t)
-                t==A[i]:
-                    return true
-        */
-        if(A[i]==t || A[mid]==t) return true;
+    public boolean search(int[] nums, int target) {
+        int n = nums.length;
+        if (n < 1) return false;
         
-        if(A[i]<A[mid]) {
-            if(t<A[i] || A[mid]<t) return s0(A, mid+1, j, t);
-            else return s0(A, i, mid, t);
-        } else if(A[i] == A[mid]) return s0(A, i+1, mid, t) || s0(A, mid+1, j, t);
-        else {
-            if(t<A[mid] || A[i]<t) return s0(A, i, mid, t);
-            else return s0(A, mid+1, j, t);
+        int lo = 0, hi = nums.length - 1;
+        
+        while (nums[hi] == nums[lo] && hi > lo) {
+            hi--;
         }
+        
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            int num = nums[mid];
+            // If nums[mid] and target are "on the same side" of nums[0], we just take nums[mid].
+            if ((nums[mid] < nums[0]) == (target < nums[0])) {
+                num = nums[mid];
+            } else {
+                num = target < nums[0] ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            }
+
+            if (num < target)
+                lo = mid + 1;
+            else if (num > target)
+                hi = mid - 1;
+            else
+                return true;
+        }
+        return false;
     }
 }

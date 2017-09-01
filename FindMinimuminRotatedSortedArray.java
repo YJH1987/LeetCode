@@ -1,46 +1,23 @@
-// Solution 1
-public class Solution {
-    public int findMin(int[] A) {
-        int L = 0, R = A.length - 1;
-        while (L < R && A[L] >= A[R]) {
-            int M = (L + R) / 2;
-            if (A[M] > A[R]) {
-                L = M + 1;
-            } else {
-                R = M;
-            }
-        }
-        return A[L];
-    }
-}
+/*Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
 
-// Solution 2
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+Find the minimum element.
+
+You may assume no duplicate exists in the array.*/
+
 public class Solution {
     public int findMin(int[] num) {
-        if(num.length == 1) return num[0];
-        if(num.length == 2) return Math.min(num[0], num[1]);
-        if(num[0] < num[num.length -1]) return num[0];
-        int mid = num.length / 2;
-        if(num[mid] > num[0]) return findMin(Arrays.copyOfRange(num, mid+1, num.length));
-        else return findMin(Arrays.copyOfRange(num, 0, mid+1));
+        int lo = 0;
+        int hi = num.length - 1;
+        while (num[lo] > num[hi]) {
+            int mid = lo + (hi - lo) / 2;
+            if (num[mid] > num[hi]) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        return num[lo];   
     }
 }
-/*
-class Solution:
-    # @param num, a list of integer
-    # @return an integer
-    def findMin(self, num):
-        if not num or len(num)==0:
-            return
-        if len(num) == 1:
-            return num[0]
-        if len(num) == 2:
-            return min(num)
-        if num[0] < num[-1]:
-            return num[0]
-        mid = len(num) / 2
-        if num[mid] > num[0]:
-            return self.findMin(num[mid+1:])
-        else:
-            return self.findMin(num[:mid+1])
-*/

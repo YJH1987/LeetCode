@@ -10,24 +10,32 @@ Depending on your language, queue may not be supported natively. You may simulat
 You may assume that all operations are valid (for example, no pop or top operations will be called on an empty stack).*/
 
 class MyStack {
-    // push to back = add(), peek = peek(), pop from front = poll(), is empty = isEmpty()
-    private Queue<Object> queue = null;
+    Queue<Integer> queue;
+
+    public MyStack() {
+        this.queue = new LinkedList < Integer > ();
+    }
+
+    // Push element x onto stack.
     public void push(int x) {
-        Queue deeper = queue;
-        queue = new LinkedList<Object>();
         queue.add(x);
-        queue.add(deeper);
+        for (int i = 0; i < queue.size() - 1; i++) {
+            queue.add(queue.poll());
+        }
     }
-    @SuppressWarnings("unchecked")
-    public void pop() {
-        // unused variable, just to show what's going on
-        int x = (Integer)queue.poll();
-        queue = (Queue<Object>)queue.poll();
+
+    // Removes the element on top of the stack.
+    public int pop() {
+        return queue.poll();
     }
+
+    // Get the top element.
     public int top() {
-        return (Integer)queue.peek();
+        return queue.peek();
     }
+
+    // Return whether the stack is empty.
     public boolean empty() {
-        return queue == null;
+        return queue.isEmpty();
     }
 }

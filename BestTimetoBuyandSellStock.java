@@ -15,17 +15,18 @@ In this case, no transaction is done, i.e. max profit = 0.*/
 
 public class Solution {
     public int maxProfit(int[] prices) {
-        if (prices.length == 0) return 0;
-        int maxProfit = 0;
-        int buyTime = 0;
-        int sellTime = 1;
-        while (sellTime < prices.length) {
-            int profit = prices[sellTime] - prices[buyTime];
-            if (profit <= 0) 
-                buyTime = sellTime;
-            maxProfit = Math.max(maxProfit, profit);
-            sellTime++;
+        if (prices.length == 0) {
+            return 0;
         }
-        return maxProfit;
+        int max = 0;
+        int sofarMin = prices[0];
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > sofarMin) {
+                max = Math.max(max, prices[i] - sofarMin);
+            } else {
+                sofarMin = prices[i];
+            }
+        }
+        return max;
     }
 }
